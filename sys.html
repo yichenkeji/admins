@@ -1,0 +1,115 @@
+﻿<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点名系统</title>
+
+    <style>
+        /* 页面css样式 */
+        .wrapper {
+            width: 800px;
+            margin: 100px auto;
+           /* border: 1px solid #ddd;外边框颜色*/
+            text-align: center;
+            background-color: RGB(211,211,211);    /*背景颜色*/
+        }
+
+        .box li {
+            vertical-align: top;
+            display: inline-block;
+            width: 100px;
+            height: 50px;
+            border: 2px solid  RGB(255,255,255);     /*姓名边框*/
+            border-radius: 15px;
+            text-align: center;
+            line-height: 50px;
+            margin: 5px;
+        }
+        
+        .wrapper button {
+            border: none;
+            width: 100px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+            outline: none;
+            margin-top: 20px;
+            font-weight: bolder;
+            color: #333;
+            background-color: RGB(102,152,242);       /*开始、停止按钮*/
+        }
+
+        .wrapper button {
+            display: inline-block;
+        }
+
+        body {
+            background-color: #eee;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="wrapper">
+     <h1 align="center">随机点名系统</h2>
+      <!-----实时显示系统时间标签----->
+        <h6 id="data" align="center"></h6>
+        <ul class="box"></ul>
+        <button class="start">开始</button>
+        <button class="stop">停止</button>
+    </div>
+</body>
+
+<script>
+    //定义全局变量方便引用
+    var boxUl = document.getElementsByClassName('box')[0];
+    var start = document.getElementsByClassName('start')[0];
+    var stop = document.getElementsByClassName('stop')[0]
+    var oLi = document.getElementsByTagName('li');
+
+    //数据准备
+    var nameString = new String("张三,李四,王五,赵六,周七,田八,国九,归零,张3,李4,王5,赵6,周7,田8,国9,归0");
+    var nameArr = nameString.split(",");
+
+    //获取每个学生姓名添加到标签中，自动解析html标签
+    var str = "";
+    for (let i = 0; i < nameArr.length; i++) {
+        str += "<li >" + nameArr[i] + "</li>"
+    }
+    boxUl.innerHTML = str;
+
+    //添加开始按钮的点击事件
+    var timer = null;
+    start.onclick = function () {
+        // 设置定时器
+        timer = setInterval(function () {
+
+            // 根据数组长度范围生成随机数
+            var i = Math.floor(Math.random() * nameArr.length);
+            // 先通过for循环清空所有style属性
+            for (var j = 0; j < oLi.length; j++) {
+                oLi[j].removeAttribute("style");
+            }
+            // 为随机选择的li颜色属性
+            oLi[i].style.background = "RGB(255,64,116)";
+        }, 150);
+    };
+    // 点击停止
+    stop.onclick = function () {
+        // 清空定时器停止点名
+        clearInterval(timer);
+    }
+    //页面初始化时间设置
+    window.onload = function () {
+        datatime();
+    }
+    //页面时间动态刷新
+    setInterval(datatime, 1000);
+
+    function datatime() {
+        let data = new Date();
+        let dataString = "北京时间："+data.toLocaleString();
+        document.getElementById("data").innerHTML = dataString;
+
+    }
+</script>
